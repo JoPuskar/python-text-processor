@@ -33,6 +33,10 @@ def write_results(results, output_file):
         print(f"Error writing to file: {e}")
         return False
 
+def is_interactive():
+    if sys.stdin.isatty():
+        return True
+
 def interactive_mode():
     """Interactive mode to process user input or view text."""
     print("Welcome to the Interactive Text Processor!")
@@ -86,15 +90,12 @@ def interactive_mode():
 
 def main(input_file="input.txt", output_file="output.txt"):
     """Main function to process text file or launch interactive mode based on user input."""
-    if sys.stdin.isatty():
-        print("Do you want to run in interactive mode? (y/n): ")
-        choice = input().lower()
-    else:
-        choice = 'n'  # Default to non-interactive in non-terminal environments
-
-    if choice == 'y':
+    
+    if is_interactive():
         interactive_mode()
-    elif choice == 'n':
+
+ # Default to non-interactive in non-terminal environments
+    else:
         text = read_file(input_file)
         if text:
             results = process_text(text)
@@ -105,9 +106,6 @@ def main(input_file="input.txt", output_file="output.txt"):
                     print(f"Content is {results}")
                     return True
         print("Processing failed.")
-        return False
-    else:
-        print("Invalid choice. Please enter 'y' or 'n' next time.")
         return False
 
 if __name__ == "__main__":
